@@ -16,7 +16,7 @@ class RevealViewController: UIViewController {
     var isSideBarShowing = false // 현재 사이드 바가 열려있는지 여부
     
     let SLIDE_TIME = 0.3 // 사이드 바가 열리고 닫히는데 걸리는 시간
-    let SLDEBAR_WIDTH: CGFloat = 260 // 사이드 바가 열릴 너비
+    let SIDEBAR_WIDTH: CGFloat = 260 // 사이드 바가 열릴 너비
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +77,43 @@ class RevealViewController: UIViewController {
     
     // 사이드 바를 연다.
     func openSideBar(_ complete: ( () -> Void)?){
+        // 1. 앞에서 정의했던 메소드들을 실행
+        self.getSideView() // 사이드 바 뷰를 읽어온다.
+        self.setShadowEffect(shadow: true, offset: -2) // 그림자 효과를 준다.
         
+        // 2. 애니메이션 옵션 실행
+        let options = UIView.AnimationOptions([.curveEaseInOut, .beginFromCurrentState])
+        // curveEaseInOut은 애니메이션 구간별 속도 옵션 ( 처음과 끝은 점점 느리게 중간은 점점 빠르게 움직이도록)
+        // beginFromCurrentState는 현재 다른 애니메이션이 진행 중일지라도 지금 상태에서 바로 진행하라는 의미
+        
+        // 3. 애니메이션 실행
+        UIView.animate(withDuration: TimeInterval(self.SLIDE_TIME), // 애니메이션 실행 시간(초)
+                       delay: TimeInterval(0), // 애니메이션 실행 전에 대기할 시간(초)
+                       options: options, // 애니메이션 실행 옵션
+                       animations: { // 실행할 애니메이션 내용 (0,0)을 기준점으로 하여
+                        // 화면 전체를 차지하고 있던 콘텐츠 뷰의 위치를 일정 크기 만큼 옆으로 옮기는 것
+                        self.contentVC?.view.frame = CGRect(x: self.SIDEBAR_WIDTH, y: 0, width: self.view.frame.width, height: self.view.frame.height)},
+                    
+            // 애니메이션 종료 후 실행해야 할 구문을 함수나 클로저 형태로 입력받는 역할
+            // 애니메이션은 비동기로 실행되기 떄문에 애니메이션이 완료되는 시점을 특정하기 어렵다
+            // 그래서 마지막 매개변수 completion이 필요하다.
+            // completion 매개변수에 입력된 함수는 애니메이션이 완료 된 후에 호출되도록 시스템적으로 보장됨
+            // 따라서 애니메이션이 끝난 후 실행해야할 코드를 넣어주면됨.
+            // 이때 completion에 들어갈 함수구문은 반드시 Bool 형태의 매개변수로 들어가야함.
+            // 해당 함수를 호출할 때 애니메이션의 실행 완료 여부를 여기에 넣어 전달하기 떄문
+            // $0 == ture라면 --> 애니메이션이 정상적으로 종료됐다면,
+            // 사이드바가 열려있다고 플래그를 변경한다.
+            // 마지막으로 complete() 메소드를 호출해 주는데
+            // openSideBar(_:) 호출 시 인자값으로 입력된 함수이다.
+            // 애니메이션이 완료된후 completion 블록에서 호출되는 동적함수이고
+            // 만약 완료 후 실행할 내용이 없다면 nil값을 반환함.
+                    completion: { // 애니메이션 완료 후 실행해야 할 내용
+                        if $0 == true {
+                        self.isSideBarShowing = true // 열림 상태로 플래그를 변경한다.
+                        complete?()
+                        }
+        }
+        )
     }
     
     // 사이드 바를 닫는다.
