@@ -21,6 +21,11 @@ class FrontViewController: UIViewController {
         // 버튼을 내비게이션 바의 왼쪽 영역에 추가
         self.navigationItem.leftBarButtonItem = btnSideBar
         
+        
+        // 화면 끝에서 다른쪽으로 패닝하는 제스처를 정의
+        let dragLeft = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(moveSide(_:)))
+        dragLeft.edges = UIRectEdge.left
+        self.view.addGestureRecognizer(dragLeft)
     }
     
     // 사용자의 액션에 따라 델리게이트 메소드를 호출한다.
