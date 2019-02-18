@@ -119,6 +119,30 @@ class RevealViewController: UIViewController {
     // 사이드 바를 닫는다.
     func closeSideBar(_ complete: ( () -> Void)?){
         
+        // 애니메이션 옵션을 정의한다.
+        let options = UIView.AnimationOptions([.curveEaseInOut, .beginFromCurrentState])
+        
+        // 애니메이션 실행
+        UIView.animate(withDuration: TimeInterval(self.SLIDE_TIME),
+                       delay: TimeInterval(0),
+                       options: options,
+                       animations: {
+                        // 1. 옆으로 밀려난 콘텐츠 뷰의 위치를 제자리로
+                        self.contentVC?.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+                        },
+                       completion: {
+                        if $0 == true {
+                            // 2. 사이드 바 뷰를 제거한다.
+                            self.sideVC?.view.removeFromSuperview()
+                            self.sideVC = nil
+                            // 3. 닫힌 상태로 플래그를 변경한다.
+                            self.isSideBarShowing = false
+                            // 4. 그림자 효과를 제거한다.
+                            self.setShadowEffect(shadow: false, offset: 0)
+                            // 5. 인자값으로 입력받은 완료 함수를 실행한다.
+                            complete?()
+                        }
+        })
     }
     
 }
