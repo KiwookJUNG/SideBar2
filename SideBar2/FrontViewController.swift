@@ -25,6 +25,10 @@ class FrontViewController: UIViewController {
     
     // 사용자의 액션에 따라 델리게이트 메소드를 호출한다.
     @objc func moveSide(_ sender: Any){
-        
+        if self.delegate?.isSideBarShowing == false {
+            self.delegate?.openSideBar(nil) // 사이드 바를 연다.
+        } else {
+            self.delegate?.closeSideBar(nil) // 사이드 바를 닫는다.
+        }
     }
 }
