@@ -30,6 +30,23 @@ class SideBarViewController: UITableViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // 계정 정보를 표시할 레이블 객체를 정의한다.
+        let accountLabel = UILabel()
+        accountLabel.frame = CGRect(x: 10, y: 30, width: self.view.frame.width, height: 30)
+        
+        accountLabel.text = "rldnr56@me.com"
+        accountLabel.textColor = UIColor.white
+        accountLabel.font = UIFont.boldSystemFont(ofSize: 15)
+        
+        // 테이블 뷰 상단에 표시될 뷰를 정의한다.
+        let v = UIView()
+        v.frame = CGRect(x: 0, y: 0, width: self.view.frame.width , height: 70) // 너비는 전체너비와 같도록
+        v.backgroundColor = UIColor.brown
+        v.addSubview(accountLabel)
+        
+        // 생성한 뷰 v를 테이블 헤더 뷰 영역에 등록한다.
+        self.tableView.tableHeaderView = v
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
