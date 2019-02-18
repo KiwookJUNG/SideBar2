@@ -26,6 +26,10 @@ class FrontViewController: UIViewController {
         let dragLeft = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(moveSide(_:)))
         dragLeft.edges = UIRectEdge.left
         self.view.addGestureRecognizer(dragLeft)
+        
+        let dragRight = UISwipeGestureRecognizer(target: self, action: #selector(moveSide(_:)))
+        dragRight.direction = .left // 방향은 왼쪽
+        self.view.addGestureRecognizer(dragRight)
     }
     
     // 사용자의 액션에 따라 델리게이트 메소드를 호출한다.
