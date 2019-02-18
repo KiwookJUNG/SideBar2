@@ -8,7 +8,8 @@
 
 import UIKit
 
-class SideBarViewController: UITabBarController{
+class SideBarViewController: UITableViewController{
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
